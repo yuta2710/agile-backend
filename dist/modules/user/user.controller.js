@@ -9,6 +9,7 @@ const error_exeptions_1 = __importDefault(require("../../utils/exceptions/error.
 const validation_middleware_1 = require("../../middleware/validation.middleware");
 const user_validation_1 = require("./user.validation");
 const colors_1 = __importDefault(require("colors"));
+const authenticated_middleware_1 = require("../../middleware/authenticated.middleware");
 class UserController {
     path = "/users";
     router = (0, express_1.Router)();
@@ -19,14 +20,13 @@ class UserController {
     initializeRoutes() {
         this.router
             .route(`${this.path}`)
-            .get(this.getAllUsers)
-            .get(this.getSingleUser)
-            .post((0, validation_middleware_1.validationMiddleware)(user_validation_1.create), this.createUser);
+            .get(authenticated_middleware_1.protect, (0, authenticated_middleware_1.authorize)("admin"), this.getAllUsers)
+            .post(authenticated_middleware_1.protect, (0, authenticated_middleware_1.authorize)("admin"), (0, validation_middleware_1.validationMiddleware)(user_validation_1.create), this.createUser);
         this.router
             .route(`${this.path}/:id`)
-            .get(this.getSingleUser)
-            .put(this.updateUser)
-            .delete(this.deleteUser);
+            .get(authenticated_middleware_1.protect, (0, authenticated_middleware_1.authorize)("admin"), this.fetchUserById)
+            .put(authenticated_middleware_1.protect, (0, authenticated_middleware_1.authorize)("admin"), this.updateUser)
+            .delete(authenticated_middleware_1.protect, (0, authenticated_middleware_1.authorize)("admin"), this.deleteUser);
     }
     createUser = async (req, res, next) => {
         try {
@@ -48,7 +48,7 @@ class UserController {
             next(new error_exeptions_1.default(400, "Unable to get all users"));
         }
     };
-    getSingleUser = async (req, res, next) => {
+    fetchUserById = async (req, res, next) => {
         try {
             const user = await this.service.fetchUserById(req.params.id);
             res.status(200).json(user);

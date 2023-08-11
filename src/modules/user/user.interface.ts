@@ -5,5 +5,5 @@ export default interface User extends Document {
     email: string, 
     password: string, 
     role: string,
-    isValidPassword(password: string): Promise<boolean | Error>
+    isValidPassword(password: string): Promise<boolean | Error>;
 }

@@ -19,9 +19,9 @@ class App {
         this.express = (0, express_1.default)();
         this.port = port;
         this.initializeDatabaseConnection();
-        this.initializeErrorHandlers();
         this.initializeGeneralMiddleware();
         this.initializeControllers(controllers);
+        this.initializeErrorHandlers();
     }
     initializeDatabaseConnection = async () => {
         try {

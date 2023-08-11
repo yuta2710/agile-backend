@@ -13,7 +13,7 @@ const sendTokenResponse = (user) => {
 exports.sendTokenResponse = sendTokenResponse;
 const verifyToken = async (token) => {
     return new Promise((resolve, reject) => {
-        return jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET, (err, payload) => {
+        jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET, (err, payload) => {
             if (err)
                 reject(err);
             resolve(payload);

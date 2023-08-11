@@ -58,8 +58,8 @@ UserSchema.pre("save", async function (next) {
     this.password = hash;
     console.log("Hashing ", this.password);
 });
-UserSchema.methods.isValidPassword = async function (currentPw) {
-    return await bcryptjs_1.default.compare(currentPw, this.password);
+UserSchema.methods.isValidPassword = async function (password) {
+    return await bcryptjs_1.default.compare(password, this.password);
 };
 exports.default = (0, mongoose_1.model)("User", UserSchema);
 //# sourceMappingURL=user.model.js.map

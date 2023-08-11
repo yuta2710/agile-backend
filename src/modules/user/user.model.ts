@@ -37,8 +37,8 @@ UserSchema.pre<User>("save", async function(next: NextFunction){
     console.log("Hashing ", this.password);
 })
 
-UserSchema.methods.isValidPassword = async function(currentPw: string): Promise<boolean | Error> {
-    return await bcryptjs.compare(currentPw, this.password);
+UserSchema.methods.isValidPassword = async function(password: string): Promise<boolean | Error> {
+    return await bcryptjs.compare(password, this.password);
 }
 
 export default model<User>("User", UserSchema);

@@ -8,7 +8,7 @@ export const errorResponseMiddleware = async (
     next: NextFunction
 ): Promise<Response | void> => {
     const status: number = err.statusCode || 500;
-    const msg: string = err.message || "Something went wrong";
+    const message: string = err.message || "Something went wrong";
 
-    res.status(status).json(msg);
+    res.status(status).json(message);
 };

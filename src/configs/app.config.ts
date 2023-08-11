@@ -18,9 +18,9 @@ class App {
         this.port = port;
 
         this.initializeDatabaseConnection();
-        this.initializeErrorHandlers();
         this.initializeGeneralMiddleware();
         this.initializeControllers(controllers);
+        this.initializeErrorHandlers();
     }
 
     private initializeDatabaseConnection = async(): Promise<void> => {

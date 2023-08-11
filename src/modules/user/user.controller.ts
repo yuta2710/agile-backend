@@ -5,8 +5,9 @@ import GeneralController from "@/utils/interfaces/controller.interface";
 import { validationMiddleware } from "../../middleware/validation.middleware";
 import {create} from "./user.validation";
 import colors from "colors";
+import { authorize, protect } from "../../middleware/authenticated.middleware";
 
-class UserController implements GeneralController{
+class UserController implements GeneralController {
     public path = "/users";
     public router: Router = Router();
     public service = new UserService();
@@ -18,24 +19,28 @@ class UserController implements GeneralController{
     private initializeRoutes() {
         this.router
             .route(`${this.path}`)
-            .get(this.getAllUsers)
-            .get(this.getSingleUser)
-            .post(validationMiddleware(create), this.createUser);
+            .get(protect, authorize("admin"), this.getAllUsers)
+            .post(
+                protect,
+                authorize("admin"),
+                validationMiddleware(create),
+                this.createUser
+            );
         this.router
             .route(`${this.path}/:id`)
-            .get(this.getSingleUser)
-            .put(this.updateUser)
-            .delete(this.deleteUser);
+            .get(protect, authorize("admin"), this.fetchUserById)
+            .put(protect, authorize("admin"), this.updateUser)
+            .delete(protect, authorize("admin"), this.deleteUser);
     }
 
     private createUser = async (
         req: Request,
         res: Response,
-        next: NextFunction,
+        next: NextFunction
     ): Promise<Response | void> => {
         try {
             const { name, email, password, role } = req.body;
-            console.log(name, email, password)
+            console.log(name, email, password);
             const user = await this.service.createUser(
                 name,
                 email,
@@ -44,7 +49,12 @@ class UserController implements GeneralController{
             );
             res.status(201).json(user);
         } catch (error) {
-            next(new ErrorResponse(400, colors.red.bold(`Unable to create this user`)));
+            next(
+                new ErrorResponse(
+                    400,
+                    colors.red.bold(`Unable to create this user`)
+                )
+            );
         }
     };
 
@@ -62,7 +72,7 @@ class UserController implements GeneralController{
         }
     };
 
-    private getSingleUser = async (
+    private fetchUserById = async (
         req: Request,
         res: Response,
         next: NextFunction
