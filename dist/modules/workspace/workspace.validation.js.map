@@ -1,0 +1,1 @@
+{"version":3,"file":"workspace.validation.js","sourceRoot":"","sources":["../../../src/modules/workspace/workspace.validation.ts"],"names":[],"mappings":";;;;;;AAAA,8CAAsB;AAET,QAAA,MAAM,GAAG,aAAG,CAAC,MAAM,CAAC;IAC7B,KAAK,EAAE,aAAG,CAAC,MAAM,EAAE,CAAC,QAAQ,EAAE,CAAC,IAAI,EAAE;IACrC,WAAW,EAAE,aAAG,CAAC,MAAM,EAAE,CAAC,IAAI,EAAE;CACnC,CAAC,CAAC"}
