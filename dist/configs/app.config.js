@@ -35,7 +35,7 @@ class App {
         }
     };
     initializeControllers(controllers) {
-        controllers.map(controller => (this.express.use(`api/${process.env.API_VERSION_1}`, controller.router)));
+        controllers.map(controller => (this.express.use(`/api/${process.env.API_VERSION_1}`, controller.router)));
     }
     initializeErrorHandlers() {
         this.express.use(error_middleware_1.errorResponseMiddleware);

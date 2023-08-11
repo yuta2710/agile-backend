@@ -37,7 +37,7 @@ class App {
 
     private initializeControllers(controllers: Controller[]): void {
         controllers.map(controller => (
-            this.express.use(`api/${process.env.API_VERSION_1}`, controller.router)
+            this.express.use(`/api/${process.env.API_VERSION_1}`, controller.router)
         ));
     }
 
