@@ -14,8 +14,15 @@ class WorkspaceController {
         this.initializeRoutes();
     }
     initializeRoutes = async () => {
-        this.router.route(`${this.path}`).get(this.getWorkspaces).post(this.createWorkspace);
-        this.router.route(`${this.path}/:id`).get(this.getWorkspace);
+        this.router
+            .route(`${this.path}`)
+            .get(this.getWorkspaces)
+            .post(this.createWorkspace);
+        this.router
+            .route(`${this.path}/:id`)
+            .get(this.getWorkspace)
+            .put(this.updateWorkspace)
+            .delete(this.deleteWorkspace);
     };
     createWorkspace = async (req, res, next) => {
         try {
@@ -43,6 +50,30 @@ class WorkspaceController {
         }
         catch (error) {
             next(new error_exeptions_1.default(400, `Unable to get this workspace`));
+        }
+    };
+    updateWorkspace = async (req, res, next) => {
+        try {
+            const updatedWorkspace = await this.service.updateWorkspace(req.params.id, req.body);
+            res.status(200).json({
+                success: true,
+                data: updatedWorkspace,
+            });
+        }
+        catch (error) {
+            next(new error_exeptions_1.default(400, `Unable to update this workspace`));
+        }
+    };
+    deleteWorkspace = async (req, res, next) => {
+        try {
+            await this.service.deleteWorkspace(req.params.id);
+            res.status(200).json({
+                success: true,
+                data: {}
+            });
+        }
+        catch (error) {
+            next(new error_exeptions_1.default(400, `Unable to update this workspace`));
         }
     };
 }

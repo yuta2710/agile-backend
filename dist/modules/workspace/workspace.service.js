@@ -8,7 +8,10 @@ class WorkspaceService {
     workspaceModel = workspace_model_1.default;
     createWorkspace = async (title, description) => {
         try {
-            const workspace = await this.workspaceModel.create({ title, description });
+            const workspace = await this.workspaceModel.create({
+                title,
+                description,
+            });
             return workspace;
         }
         catch (error) {
@@ -26,11 +29,32 @@ class WorkspaceService {
     };
     fetchWorkspaceById = async (workspaceId) => {
         try {
-            const workspace = await this.workspaceModel.findById(workspaceId).exec();
+            const workspace = await this.workspaceModel
+                .findById(workspaceId)
+                .exec();
             if (!workspace) {
                 throw new Error(`A workspace <${workspaceId} does not found> `);
             }
             return workspace;
+        }
+        catch (error) {
+            throw new Error(error.message);
+        }
+    };
+    updateWorkspace = async (workspaceId, newWorkspace) => {
+        try {
+            const updatedWorkspace = await this.workspaceModel
+                .findByIdAndUpdate(workspaceId, newWorkspace, { new: true })
+                .exec();
+            return updatedWorkspace;
+        }
+        catch (error) {
+            throw new Error(error.message);
+        }
+    };
+    deleteWorkspace = async (workspaceId) => {
+        try {
+            await this.workspaceModel.findByIdAndDelete(workspaceId);
         }
         catch (error) {
             throw new Error(error.message);

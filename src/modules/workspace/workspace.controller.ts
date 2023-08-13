@@ -12,9 +12,16 @@ class WorkspaceController {
     }
 
     private initializeRoutes = async (): Promise<Response | void> => {
-        this.router.route(`${this.path}`).get(this.getWorkspaces).post(this.createWorkspace);
+        this.router
+            .route(`${this.path}`)
+            .get(this.getWorkspaces)
+            .post(this.createWorkspace);
 
-        this.router.route(`${this.path}/:id`).get(this.getWorkspace);
+        this.router
+            .route(`${this.path}/:id`)
+            .get(this.getWorkspace)
+            .put(this.updateWorkspace)
+            .delete(this.deleteWorkspace);
     };
 
     private createWorkspace = async (
@@ -49,19 +56,58 @@ class WorkspaceController {
         }
     };
 
-    private getWorkspace = async(
+    private getWorkspace = async (
         req: Request,
         res: Response,
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const workspace = await this.service.fetchWorkspaceById(req.params.id);
+            const workspace = await this.service.fetchWorkspaceById(
+                req.params.id
+            );
 
-            res.status(200).json({success: true, workspace});
+            res.status(200).json({ success: true, workspace });
         } catch (error) {
             next(new ErrorResponse(400, `Unable to get this workspace`));
         }
-    }
+    };
+
+    private updateWorkspace = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> => {
+        try {
+            const updatedWorkspace = await this.service.updateWorkspace(
+                req.params.id,
+                req.body
+            );
+
+            res.status(200).json({
+                success: true,
+                data: updatedWorkspace,
+            });
+        } catch (error) {
+            next(new ErrorResponse(400, `Unable to update this workspace`));
+        }
+    };
+
+    private deleteWorkspace = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> => {
+        try {
+            await this.service.deleteWorkspace(req.params.id);
+
+            res.status(200).json({
+                success: true,
+                data: {}
+            })
+        } catch (error) {
+            next(new ErrorResponse(400, `Unable to update this workspace`));
+        }
+    };
 }
 
 export default WorkspaceController;
